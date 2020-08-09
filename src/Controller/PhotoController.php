@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Photo;
 use App\Form\PhotoType;
 use App\Repository\PhotoRepository;
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,13 +29,21 @@ class PhotoController extends AbstractController
     /**
      * @Route("/new", name="photo_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, FileUploader $fileUploader): Response
     {
         $photo = new Photo();
         $form = $this->createForm(PhotoType::class, $photo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $images = $form->get('image')->getData();
+    
+            foreach($images as $image){
+                $imageFileName = $fileUploader->upload($image, 'images_directory');
+                $photo->setImg($imageFileName);
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($photo);
             $entityManager->flush();

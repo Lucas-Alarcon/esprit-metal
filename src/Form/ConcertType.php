@@ -6,6 +6,7 @@ use App\Entity\Concert;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ConcertType extends AbstractType
 {
@@ -13,7 +14,9 @@ class ConcertType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('date')
+            ->add('date', DateType::class, [
+                'widget' => 'single_text',
+            ])
             ->add('description')
             ->add('img')
             ->add('salle')

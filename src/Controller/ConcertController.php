@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Concert;
+use App\Entity\Photo;
 use App\Form\ConcertType;
+use App\Form\PhotoType;
 use App\Repository\ConcertRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\FileUploader;
 
 /**
  * @Route("/concert")
@@ -74,6 +77,38 @@ class ConcertController extends AbstractController
 
         return $this->render('concert/edit.html.twig', [
             'concert' => $concert,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/add", name="concert_add", methods={"GET","POST"})
+     */
+    public function add(Request $request, Concert $concert, FileUploader $fileUploader): Response
+    {
+        $photo = new Photo();
+        $form = $this->createForm(PhotoType::class, $photo);
+        $form->handleRequest($request);
+        // var_dump($photo);die();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $images = $form->get('image')->getData();
+    
+            foreach($images as $image){
+                $imageFileName = $fileUploader->upload($image, 'images_directory');
+                $photo->setImg($imageFileName);
+                $photo->setConcert($concert);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($photo);
+                $entityManager->flush();
+            }
+
+            return $this->redirectToRoute('concert_index');
+        }
+
+        return $this->render('photo/new.html.twig', [
+            'photo' => $photo,
             'form' => $form->createView(),
         ]);
     }
