@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Concert{% endblock %}
+
+{% block main %}
+<div class="container">
+    <h1>Create new Concert</h1>
+
+    {{ include('concert/_form.html.twig') }}
+
+    <a href="{{ path('concert_index') }}">back to list</a>
+</div>
+{% endblock %}
