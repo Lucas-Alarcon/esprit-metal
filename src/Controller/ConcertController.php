@@ -86,29 +86,30 @@ class ConcertController extends AbstractController
      */
     public function add(Request $request, Concert $concert, FileUploader $fileUploader): Response
     {
-        $photo = new Photo();
-        $form = $this->createForm(PhotoType::class, $photo);
+        $form = $this->createForm(PhotoType::class);
         $form->handleRequest($request);
-        // var_dump($photo);die();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $images = $form->get('image')->getData();
-    
+            $images = $form->get('images')->getData();
+            $imageGroupe = $form->get('groupe')->getData();
+            
             foreach($images as $image){
+                $photo = new Photo();
+                $photo->setGroupe($imageGroupe);
+                $photo->setConcert($concert);
                 $imageFileName = $fileUploader->upload($image, 'images_directory');
                 $photo->setImg($imageFileName);
-                $photo->setConcert($concert);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($photo);
-                $entityManager->flush();
             }
+            $entityManager->flush();
 
             return $this->redirectToRoute('concert_index');
         }
 
         return $this->render('photo/new.html.twig', [
-            'photo' => $photo,
+            'concert' => $concert,
             'form' => $form->createView(),
         ]);
     }

@@ -35,6 +35,8 @@
 
     <a href="{{ path('concert_edit', {'id': concert.id}) }}">edit</a>
 
+    <a href="{{ path('concert_add', {'id': concert.id}) }}">add</a>
+
     {{ include('concert/_delete_form.html.twig') }}
 </div>
 {% endblock %}

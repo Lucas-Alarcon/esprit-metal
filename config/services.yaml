@@ -5,6 +5,10 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     images_directory: '%kernel.project_dir%/public/images'
+    images_concerts_directory: '%kernel.project_dir%/public/images/concerts'
+    images_salles_directory: '%kernel.project_dir%/public/images/salles'
+    images_groupes_directory: '%kernel.project_dir%/public/images/groupes'
+    images_photos_directory: '%kernel.project_dir%/public/images/photos'
 
 services:
     # default configuration for services in *this* file

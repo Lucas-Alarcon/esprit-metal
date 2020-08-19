@@ -40,7 +40,7 @@ class PhotoController extends AbstractController
             $images = $form->get('image')->getData();
     
             foreach($images as $image){
-                $imageFileName = $fileUploader->upload($image, 'images_directory');
+                $imageFileName = $fileUploader->upload($image, 'photos_directory');
                 $photo->setImg($imageFileName);
             }
 

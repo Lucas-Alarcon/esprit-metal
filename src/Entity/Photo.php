@@ -20,11 +20,6 @@ class Photo
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
-
-    /**
-     * @ORM\Column(type="array", length=255)
-     */
     private $img;
 
     /**
